@@ -9,39 +9,35 @@ public class PalindromeChecker {
 
 
 
-        String input = "refer";
+        String input = "madam";
 
-        System.out.println("Original String: " + input);
+        boolean result = check(input, 0, input.length() - 1);
 
-        // Create a Deque to store characters
-        Deque<Character> deque = new ArrayDeque<>();
+        System.out.println("Input: " + input);
+        System.out.println("Is Palindrome? " + result);
+    }
 
-        // Add each character to the deque
-        for (char c : input.toCharArray()) {
-            deque.addLast(c);
+    /**
+     * Recursively checks whether a string is palindrome
+     * @param s Input string
+     * @param start Starting index
+     * @param end Ending index
+     * @return true if palindrome, otherwise false
+     */
+    private static boolean check(String s, int start, int end) {
+
+        // Base condition: if pointers cross or meet
+        if (start >= end) {
+            return true;
         }
 
-        // Flag to track palindrome result
-        boolean isPalindrome = true;
-
-        // Continue comparison while more than one element exists
-        while (deque.size() > 1) {
-
-            char front = deque.removeFirst();
-            char rear = deque.removeLast();
-
-            if (front != rear) {
-                isPalindrome = false;
-                break;
-            }
+        // If characters don't match
+        if (s.charAt(start) != s.charAt(end)) {
+            return false;
         }
 
-        // Display result
-        if (isPalindrome) {
-            System.out.println("Result: The string is a Palindrome ✅");
-        } else {
-            System.out.println("Result: The string is NOT a Palindrome ❌");
-        }
+        // Recursive call moving inward
+        return check(s, start + 1, end - 1);
     }
 
 
