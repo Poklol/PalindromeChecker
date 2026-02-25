@@ -1,41 +1,43 @@
-// Strategy Interface
-interface PalindromeStrategy {
-    boolean check(String input);
-}
+import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Deque;
 
+public class PalindromeChecker {
 
-// Stack-based implementation
-class StackStrategy implements PalindromeStrategy {
+    // Two Pointer approach
+    public static boolean twoPointerCheck(String input) {
+        int start = 0;
+        int end = input.length() - 1;
 
-    @Override
-    public boolean check(String input) {
+        while (start < end) {
+            if (input.charAt(start) != input.charAt(end)) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
+    }
 
-        java.util.Stack<Character> stack = new java.util.Stack<>();
+    // Stack approach
+    public static boolean stackCheck(String input) {
+        Stack<Character> stack = new Stack<>();
 
-        // Push all characters into stack
         for (char c : input.toCharArray()) {
             stack.push(c);
         }
 
-        // Compare original string with popped characters
         for (char c : input.toCharArray()) {
             if (c != stack.pop()) {
                 return false;
             }
         }
-
         return true;
     }
-}
 
-
-// Deque-based implementation
-class DequeStrategy implements PalindromeStrategy {
-
-    @Override
-    public boolean check(String input) {
-
-        java.util.Deque<Character> deque = new java.util.LinkedList<>();
+    // Deque approach
+    public static boolean dequeCheck(String input) {
+        Deque<Character> deque = new LinkedList<>();
 
         for (char c : input.toCharArray()) {
             deque.add(c);
@@ -46,33 +48,36 @@ class DequeStrategy implements PalindromeStrategy {
                 return false;
             }
         }
-
         return true;
     }
-}
-public class PalindromeChecker {
-    public static void main(String[] args){
 
+    // Main method (ONLY ONE)
+    public static void main(String[] args) {
 
-
-        String input = "Level";
-
-        // Normalize for case-insensitive comparison
+        String input = "level";
         input = input.toLowerCase();
 
-        // Choose strategy at runtime
-        PalindromeStrategy strategy;
+        // Benchmark Two Pointer
+        long startTime1 = System.nanoTime();
+        boolean result1 = twoPointerCheck(input);
+        long duration1 = System.nanoTime() - startTime1;
 
-        // You can switch algorithm here dynamically
-        strategy = new StackStrategy();
-        // strategy = new DequeStrategy();
+        // Benchmark Stack
+        long startTime2 = System.nanoTime();
+        boolean result2 = stackCheck(input);
+        long duration2 = System.nanoTime() - startTime2;
 
-        boolean result = strategy.check(input);
+        // Benchmark Deque
+        long startTime3 = System.nanoTime();
+        boolean result3 = dequeCheck(input);
+        long duration3 = System.nanoTime() - startTime3;
 
         System.out.println("Input: " + input);
-        System.out.println("Is Palindrome?: " + result);
+        System.out.println("Is Palindrome? " + result1);
+        System.out.println();
+
+        System.out.println("Two Pointer Execution Time: " + duration1 + " ns");
+        System.out.println("Stack Execution Time: " + duration2 + " ns");
+        System.out.println("Deque Execution Time: " + duration3 + " ns");
     }
-
-
-
 }
