@@ -1,50 +1,76 @@
-// Service class that contains palindrome logic
-class PalindromeService {
+// Strategy Interface
+interface PalindromeStrategy {
+    boolean check(String input);
+}
 
-    /**
-     * Checks whether the input string is a palindrome
-     * @param input Input string
-     * @return true if palindrome, false otherwise
-     */
-    public boolean checkPalindrome(String input) {
 
-        if (input == null) {
-            return false;
+// Stack-based implementation
+class StackStrategy implements PalindromeStrategy {
+
+    @Override
+    public boolean check(String input) {
+
+        java.util.Stack<Character> stack = new java.util.Stack<>();
+
+        // Push all characters into stack
+        for (char c : input.toCharArray()) {
+            stack.push(c);
         }
 
-        int start = 0;
-        int end = input.length() - 1;
-
-        // Compare characters moving inward
-        while (start < end) {
-
-            if (input.charAt(start) != input.charAt(end)) {
+        // Compare original string with popped characters
+        for (char c : input.toCharArray()) {
+            if (c != stack.pop()) {
                 return false;
             }
-
-            start++;
-            end--;
         }
 
         return true;
     }
 }
 
+
+// Deque-based implementation
+class DequeStrategy implements PalindromeStrategy {
+
+    @Override
+    public boolean check(String input) {
+
+        java.util.Deque<Character> deque = new java.util.LinkedList<>();
+
+        for (char c : input.toCharArray()) {
+            deque.add(c);
+        }
+
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
 public class PalindromeChecker {
     public static void main(String[] args){
 
 
 
-        String input = "racecar";
+        String input = "Level";
 
-        // Create service object
-        PalindromeService service = new PalindromeService();
+        // Normalize for case-insensitive comparison
+        input = input.toLowerCase();
 
-        // Call service method
-        boolean result = service.checkPalindrome(input);
+        // Choose strategy at runtime
+        PalindromeStrategy strategy;
+
+        // You can switch algorithm here dynamically
+        strategy = new StackStrategy();
+        // strategy = new DequeStrategy();
+
+        boolean result = strategy.check(input);
 
         System.out.println("Input: " + input);
-        System.out.println("Is Palindrome? " + result);
+        System.out.println("Is Palindrome?: " + result);
     }
 
 
